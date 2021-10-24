@@ -1,4 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
@@ -18,11 +24,17 @@ export class Car {
   @ApiProperty()
   ano: string;
 
-  @Column()
+  @Column('simple-array')
   @ApiProperty()
-  acessorios: string;
+  acessorios: string[];
 
   @Column()
   @ApiProperty()
   quantidadePassagerios: string;
+
+  @CreateDateColumn()
+  data_criacao: Date;
+
+  @UpdateDateColumn()
+  data_atualizacao: Date;
 }

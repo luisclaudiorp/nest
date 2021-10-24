@@ -5,6 +5,6 @@ export class UpdateCarDto extends PartialType(CreateCarDto) {
   modelo: string;
   cor: string;
   ano: string;
-  acessorios: string;
+  acessorios: string[];
   quantidadePassagerios: string;
 }

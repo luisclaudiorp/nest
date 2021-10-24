@@ -5,6 +5,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 
+export type UserType = any;
+
 @Injectable()
 export class UsersService {
   constructor(
@@ -24,6 +26,15 @@ export class UsersService {
   async findOneById(id: number): Promise<User> {
     try {
       const user = await this.usersRepository.findOneOrFail(id);
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async findByEmail(email: string): Promise<User> {
+    try {
+      const user = await this.usersRepository.findOne({ email });
       return user;
     } catch (error) {
       throw error;
