@@ -30,6 +30,8 @@
 
 ```bash
 $ npm install
+
+$ adjust the database connection in ormconfig.json.exemple and remove .example from its name
 ```
 
 ## Running the app
