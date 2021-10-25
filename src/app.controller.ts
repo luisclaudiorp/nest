@@ -3,7 +3,7 @@ import { AuthService } from './auth/shared/auth.service';
 import { JwtAuthGuard } from './auth/shared/jwt-auth.guard';
 import { LocalAuthGuard } from './auth/shared/local-auth.guard';
 
-@Controller()
+@Controller('api/v1')
 export class AppController {
   constructor(private authService: AuthService) {}
 

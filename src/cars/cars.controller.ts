@@ -13,7 +13,7 @@ import { CreateCarDto } from './dto/create-car.dto';
 import { UpdateCarDto } from './dto/update-car.dto';
 import { JwtAuthGuard } from 'src/auth/shared/jwt-auth.guard';
 
-@Controller('cars')
+@Controller('/api/v1/car')
 export class CarsController {
   constructor(private readonly carsService: CarsService) {}
 
