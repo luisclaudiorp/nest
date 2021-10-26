@@ -2,33 +2,36 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+import { Description } from 'src/descriptions/entities/description.entity';
 
 @Entity()
 export class Car {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: false, type: 'varchar', length: 100 })
   @ApiProperty()
   modelo: string;
 
-  @Column()
+  @Column({ nullable: false, type: 'varchar', length: 50 })
   @ApiProperty()
   cor: string;
 
-  @Column()
+  @Column({ nullable: false, type: 'varchar', length: 10 })
   @ApiProperty()
-  ano: string;
+  ano: number;
 
-  @Column('simple-array')
+  @Column({ nullable: false })
   @ApiProperty()
-  acessorios: string[];
+  acessorios: string;
 
-  @Column()
+  @Column({ nullable: false, type: 'int' })
   @ApiProperty()
   quantidadePassagerios: string;
 
@@ -37,4 +40,8 @@ export class Car {
 
   @UpdateDateColumn()
   data_atualizacao: Date;
+
+  @ManyToOne(() => Description, (a) => a.car)
+  @JoinColumn()
+  descricoes: Description;
 }

@@ -3,32 +3,34 @@ import {
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
+@Unique(['cpf'])
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: false, type: 'varchar', length: 200 })
   @ApiProperty()
   nome: string;
 
-  @Column({ type: 'varchar', length: 11, unique: true })
+  @Column({ nullable: false, type: 'varchar', length: 11 })
   @ApiProperty()
   cpf: string;
 
-  @Column()
+  @Column({ nullable: false, type: 'varchar', length: 11 })
   @ApiProperty()
   data_nascimento: string;
 
-  @Column()
+  @Column({ nullable: false, type: 'varchar', length: 100 })
   @ApiProperty()
   email: string;
 
-  @Column()
+  @Column({ nullable: false })
   @ApiProperty()
   senha: string;
 
