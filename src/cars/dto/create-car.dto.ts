@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsInt, IsString, Max, Min } from 'class-validator';
+import { Acessorio } from '../entities/acessorios.entity';
 
 export class CreateCarDto {
   @ApiProperty()
@@ -17,8 +18,8 @@ export class CreateCarDto {
   ano: number;
 
   @ApiProperty()
-  @IsString()
-  acessorios: string;
+  // @IsString()
+  acessorios: Acessorio[];
 
   @ApiProperty()
   @IsInt()

@@ -18,13 +18,17 @@ import {
   ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
+  ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 
 @Controller('/api/v1/car')
+@ApiTags('Car')
 export class CarsController {
   constructor(private readonly carsService: CarsService) {}
 
   @ApiBearerAuth()
+  @ApiUnauthorizedResponse()
   @ApiCreatedResponse({ type: Car })
   @UseGuards(JwtAuthGuard)
   @Post()
@@ -33,6 +37,7 @@ export class CarsController {
   }
 
   @ApiBearerAuth()
+  @ApiUnauthorizedResponse()
   @ApiOkResponse({ type: Car, isArray: true })
   @UseGuards(JwtAuthGuard)
   @Get()
@@ -41,6 +46,7 @@ export class CarsController {
   }
 
   @ApiBearerAuth()
+  @ApiUnauthorizedResponse()
   @ApiOkResponse({ type: Car })
   @ApiNotFoundResponse()
   @UseGuards(JwtAuthGuard)
@@ -50,6 +56,7 @@ export class CarsController {
   }
 
   @ApiBearerAuth()
+  @ApiUnauthorizedResponse()
   @ApiOkResponse({ type: Car })
   @ApiNotFoundResponse()
   @UseGuards(JwtAuthGuard)
@@ -59,6 +66,7 @@ export class CarsController {
   }
 
   @ApiBearerAuth()
+  @ApiUnauthorizedResponse()
   @ApiOkResponse({ type: Car })
   @ApiNotFoundResponse()
   @UseGuards(JwtAuthGuard)

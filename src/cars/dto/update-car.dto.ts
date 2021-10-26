@@ -1,5 +1,6 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { IsInt, IsString, Max, Min } from 'class-validator';
+import { Acessorio } from '../entities/acessorios.entity';
 import { CreateCarDto } from './create-car.dto';
 
 export class UpdateCarDto extends PartialType(CreateCarDto) {
@@ -18,8 +19,8 @@ export class UpdateCarDto extends PartialType(CreateCarDto) {
   ano: number;
 
   @ApiProperty()
-  @IsString()
-  acessorios: string;
+  // @IsString()
+  acessorios: Acessorio[];
 
   @ApiProperty()
   @IsInt()

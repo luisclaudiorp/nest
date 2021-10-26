@@ -2,13 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
-  ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { Description } from 'src/descriptions/entities/description.entity';
+import { Acessorio } from './acessorios.entity';
 
 @Entity()
 export class Car {
@@ -27,9 +26,9 @@ export class Car {
   @ApiProperty()
   ano: number;
 
-  @Column({ nullable: false })
+  @OneToMany(() => Acessorio, (a) => a.car)
   @ApiProperty()
-  acessorios: string;
+  acessorios: Acessorio;
 
   @Column({ nullable: false, type: 'int' })
   @ApiProperty()
@@ -40,8 +39,4 @@ export class Car {
 
   @UpdateDateColumn()
   data_atualizacao: Date;
-
-  @ManyToOne(() => Description, (a) => a.car)
-  @JoinColumn()
-  descricoes: Description;
 }

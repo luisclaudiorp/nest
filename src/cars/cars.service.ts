@@ -4,21 +4,35 @@ import { Repository } from 'typeorm';
 import { CreateCarDto } from './dto/create-car.dto';
 import { UpdateCarDto } from './dto/update-car.dto';
 import { Car } from './entities/car.entity';
+import { Acessorio } from './entities/acessorios.entity';
 
 @Injectable()
 export class CarsService {
   constructor(
     @InjectRepository(Car)
     private carsRepository: Repository<Car>,
+    @InjectRepository(Acessorio)
+    private acessorioRepository: Repository<Acessorio>,
   ) {}
 
-  create(CreateCarDto: CreateCarDto): Promise<Car> {
-    const newCar = this.carsRepository.create(CreateCarDto);
-    return this.carsRepository.save(newCar);
+  async create(CreateCarDto: CreateCarDto): Promise<Car> {
+    const { acessorios, ...data } = CreateCarDto;
+    const newCar = this.carsRepository.create(data);
+    await this.carsRepository.save(newCar);
+    CreateCarDto.acessorios.forEach(async (a) => {
+      const acessorio = new Acessorio();
+      acessorio.descricao = a.descricao;
+      acessorio.car = newCar;
+      const newAcessorio = this.acessorioRepository.create(acessorio);
+      await this.acessorioRepository.save(newAcessorio);
+    });
+    return await this.carsRepository.findOne(newCar.id);
   }
 
   findAll(): Promise<Car[]> {
-    return this.carsRepository.find();
+    return this.carsRepository.find({
+      relations: ['acessorios'],
+    });
   }
 
   async findOneById(id: number): Promise<Car> {
@@ -33,7 +47,8 @@ export class CarsService {
   async update(id: number, UpdateCarDto: UpdateCarDto): Promise<Car> {
     try {
       const car = await this.findOneById(id);
-      this.carsRepository.merge(car, UpdateCarDto);
+      const { acessorios, ...data } = UpdateCarDto;
+      this.carsRepository.merge(car, data);
       const results = await this.carsRepository.save(car);
       return results;
     } catch (error) {
