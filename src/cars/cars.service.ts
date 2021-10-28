@@ -20,11 +20,15 @@ export class CarsService {
     private acessorioRepository: Repository<Acessorio>,
   ) {}
 
-  async paginate(options: IPaginationOptions): Promise<Pagination<Car>> {
-    const queryBuilder = this.carsRepository.createQueryBuilder('c');
-    queryBuilder.orderBy('c.modelo', 'DESC');
-
-    return paginate<Car>(queryBuilder, options);
+  async paginate(
+    options: IPaginationOptions,
+    query: object,
+  ): Promise<Pagination<Car>> {
+    this.clear(query);
+    return paginate<Car>(this.carsRepository, options, {
+      where: query,
+      relations: ['acessorios'],
+    });
   }
 
   async create(CreateCarDto: CreateCarDto): Promise<Car> {
@@ -39,18 +43,6 @@ export class CarsService {
       await this.acessorioRepository.save(newAcessorio);
     });
     return await this.carsRepository.findOne(newCar.id);
-  }
-
-  async findAll(search: any): Promise<Car[]> {
-    if (search) {
-      return this.carsRepository.find({
-        where: search,
-        relations: ['acessorios'],
-      });
-    }
-    return this.carsRepository.find({
-      relations: ['acessorios'],
-    });
   }
 
   async findOneById(id: number): Promise<Car> {
@@ -79,5 +71,12 @@ export class CarsService {
     } catch (error) {
       throw error;
     }
+  }
+
+  clear(obj: object) {
+    Object.keys(obj).forEach((key) => {
+      if (obj[key] === obj['page'] || obj['limit']) delete obj[key];
+    });
+    return obj;
   }
 }

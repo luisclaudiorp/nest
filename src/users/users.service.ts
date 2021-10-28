@@ -5,15 +5,15 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './entities/user.entity';
 import {
   IPaginationOptions,
   paginate,
   Pagination,
 } from 'nestjs-typeorm-paginate';
-import { Repository } from 'typeorm';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './entities/user.entity';
 
 export type UserType = any;
 
@@ -24,11 +24,14 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  async paginate(options: IPaginationOptions): Promise<Pagination<User>> {
-    const queryBuilder = this.usersRepository.createQueryBuilder('p');
-    queryBuilder.orderBy('p.nome', 'DESC');
-
-    return paginate<User>(queryBuilder, options);
+  async paginate(
+    options: IPaginationOptions,
+    query: object,
+  ): Promise<Pagination<User>> {
+    this.clear(query);
+    return paginate<User>(this.usersRepository, options, {
+      where: query,
+    });
   }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
@@ -92,5 +95,12 @@ export class UsersService {
     } catch (error) {
       throw new NotFoundException();
     }
+  }
+
+  clear(obj: object) {
+    Object.keys(obj).forEach((key) => {
+      if (obj[key] === obj['page'] || obj['limit']) delete obj[key];
+    });
+    return obj;
   }
 }

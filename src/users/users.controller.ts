@@ -29,24 +29,21 @@ import { Pagination } from 'nestjs-typeorm-paginate';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @ApiOkResponse({ type: User, isArray: true })
+  @ApiQuery({ name: 'query parans', required: false })
   @Get('')
   async index(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page = 1,
-    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit = 100,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit = 10,
+    @Query() query: any,
   ): Promise<Pagination<User>> {
     limit = limit > 100 ? 100 : limit;
-    return this.usersService.paginate({
+    const options = {
       page,
       limit,
       route: 'api/v1/people',
-    });
-  }
-
-  @ApiOkResponse({ type: User, isArray: true })
-  @ApiQuery({ name: 'query parans', required: false })
-  @Get()
-  findAll(@Query('query parans') name?: object) {
-    return this.usersService.findAll(name);
+    };
+    return this.usersService.paginate(options, query);
   }
 
   @ApiOkResponse({ type: User })

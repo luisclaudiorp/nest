@@ -32,28 +32,21 @@ import { Pagination } from 'nestjs-typeorm-paginate';
 export class CarsController {
   constructor(private readonly carsService: CarsService) {}
 
+  @ApiOkResponse({ type: Car, isArray: true })
+  @ApiQuery({ name: 'query parans', required: false })
   @Get('')
   async index(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page = 1,
-    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit = 100,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit = 10,
+    @Query() query: any,
   ): Promise<Pagination<Car>> {
     limit = limit > 100 ? 100 : limit;
-    return this.carsService.paginate({
+    const options = {
       page,
       limit,
-      route: 'api/v1/car',
-    });
-  }
-
-  @ApiBearerAuth()
-  @ApiOkResponse({ type: Car })
-  @ApiUnauthorizedResponse()
-  @ApiOkResponse({ type: Car, isArray: true })
-  @UseGuards(JwtAuthGuard)
-  @ApiQuery({ name: 'query parans', required: false })
-  @Get()
-  findAll(@Query() query: any) {
-    return this.carsService.findAll(query);
+      route: 'api/v1/people',
+    };
+    return this.carsService.paginate(options, query);
   }
 
   @ApiBearerAuth()
