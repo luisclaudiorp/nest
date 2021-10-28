@@ -5,6 +5,11 @@ import { CreateCarDto } from './dto/create-car.dto';
 import { UpdateCarDto } from './dto/update-car.dto';
 import { Car } from './entities/car.entity';
 import { Acessorio } from './entities/acessorios.entity';
+import {
+  IPaginationOptions,
+  Pagination,
+  paginate,
+} from 'nestjs-typeorm-paginate';
 
 @Injectable()
 export class CarsService {
@@ -14,6 +19,13 @@ export class CarsService {
     @InjectRepository(Acessorio)
     private acessorioRepository: Repository<Acessorio>,
   ) {}
+
+  async paginate(options: IPaginationOptions): Promise<Pagination<Car>> {
+    const queryBuilder = this.carsRepository.createQueryBuilder('c');
+    queryBuilder.orderBy('c.modelo', 'DESC');
+
+    return paginate<Car>(queryBuilder, options);
+  }
 
   async create(CreateCarDto: CreateCarDto): Promise<Car> {
     const { acessorios, ...data } = CreateCarDto;
@@ -29,7 +41,13 @@ export class CarsService {
     return await this.carsRepository.findOne(newCar.id);
   }
 
-  findAll(): Promise<Car[]> {
+  async findAll(search: any): Promise<Car[]> {
+    if (search) {
+      return this.carsRepository.find({
+        where: search,
+        relations: ['acessorios'],
+      });
+    }
     return this.carsRepository.find({
       relations: ['acessorios'],
     });
@@ -37,8 +55,7 @@ export class CarsService {
 
   async findOneById(id: number): Promise<Car> {
     try {
-      const car = await this.carsRepository.findOneOrFail(id);
-      return car;
+      return await this.carsRepository.findOneOrFail(id);
     } catch (error) {
       throw error;
     }
@@ -49,8 +66,7 @@ export class CarsService {
       const car = await this.findOneById(id);
       const { acessorios, ...data } = UpdateCarDto;
       this.carsRepository.merge(car, data);
-      const results = await this.carsRepository.save(car);
-      return results;
+      return await this.carsRepository.save(car);
     } catch (error) {
       throw error;
     }
@@ -59,8 +75,7 @@ export class CarsService {
   async remove(id: number): Promise<Car> {
     try {
       const Car = await this.findOneById(id);
-      const result = await this.carsRepository.remove(Car);
-      return result;
+      return await this.carsRepository.remove(Car);
     } catch (error) {
       throw error;
     }

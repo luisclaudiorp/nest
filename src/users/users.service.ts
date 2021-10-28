@@ -1,5 +1,15 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import {
+  IPaginationOptions,
+  paginate,
+  Pagination,
+} from 'nestjs-typeorm-paginate';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -14,9 +24,27 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  create(createUserDto: CreateUserDto): Promise<User> {
-    const newUser = this.usersRepository.create(createUserDto);
-    return this.usersRepository.save(newUser);
+  async paginate(options: IPaginationOptions): Promise<Pagination<User>> {
+    const queryBuilder = this.usersRepository.createQueryBuilder('p');
+    queryBuilder.orderBy('p.nome', 'DESC');
+
+    return paginate<User>(queryBuilder, options);
+  }
+
+  async create(createUserDto: CreateUserDto): Promise<User> {
+    const obj = await this.findByCpf(createUserDto.cpf);
+    if (typeof obj === 'undefined') {
+      const newUser = this.usersRepository.create(createUserDto);
+      console.log(newUser);
+      return this.usersRepository.save(newUser);
+    }
+    throw new HttpException(
+      {
+        status: HttpStatus.BAD_REQUEST,
+        error: 'CPF already em use',
+      },
+      HttpStatus.BAD_REQUEST,
+    );
   }
 
   findAll(query?: object): Promise<User[]> {
@@ -25,8 +53,7 @@ export class UsersService {
 
   async findOneById(id: number): Promise<User> {
     try {
-      const user = await this.usersRepository.findOneOrFail(id);
-      return user;
+      return await this.usersRepository.findOneOrFail(id);
     } catch (error) {
       throw new NotFoundException();
     }
@@ -34,8 +61,15 @@ export class UsersService {
 
   async findByEmail(email: string): Promise<User> {
     try {
-      const user = await this.usersRepository.findOne({ email });
-      return user;
+      return await this.usersRepository.findOne({ email });
+    } catch (error) {
+      throw new NotFoundException();
+    }
+  }
+
+  async findByCpf(cpf: string): Promise<User> {
+    try {
+      return await this.usersRepository.findOne({ cpf });
     } catch (error) {
       throw new NotFoundException();
     }
@@ -45,8 +79,7 @@ export class UsersService {
     try {
       const user = await this.findOneById(id);
       this.usersRepository.merge(user, updateUserDto);
-      const results = await this.usersRepository.save(user);
-      return results;
+      return await this.usersRepository.save(user);
     } catch (error) {
       throw new NotFoundException();
     }
@@ -55,8 +88,7 @@ export class UsersService {
   async remove(id: number): Promise<User> {
     try {
       const user = await this.findOneById(id);
-      const result = await this.usersRepository.remove(user);
-      return result;
+      return await this.usersRepository.remove(user);
     } catch (error) {
       throw new NotFoundException();
     }

@@ -7,6 +7,9 @@ import {
   Param,
   Delete,
   UseGuards,
+  DefaultValuePipe,
+  ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { CarsService } from './cars.service';
 import { CreateCarDto } from './dto/create-car.dto';
@@ -18,31 +21,39 @@ import {
   ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
+  ApiQuery,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+import { Pagination } from 'nestjs-typeorm-paginate';
 
 @Controller('/api/v1/car')
 @ApiTags('Car')
 export class CarsController {
   constructor(private readonly carsService: CarsService) {}
 
-  @ApiBearerAuth()
-  @ApiUnauthorizedResponse()
-  @ApiCreatedResponse({ type: Car })
-  @UseGuards(JwtAuthGuard)
-  @Post()
-  create(@Body() createCarDto: CreateCarDto) {
-    return this.carsService.create(createCarDto);
+  @Get('')
+  async index(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page = 1,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit = 100,
+  ): Promise<Pagination<Car>> {
+    limit = limit > 100 ? 100 : limit;
+    return this.carsService.paginate({
+      page,
+      limit,
+      route: 'api/v1/car',
+    });
   }
 
   @ApiBearerAuth()
+  @ApiOkResponse({ type: Car })
   @ApiUnauthorizedResponse()
   @ApiOkResponse({ type: Car, isArray: true })
   @UseGuards(JwtAuthGuard)
+  @ApiQuery({ name: 'query parans', required: false })
   @Get()
-  findAll() {
-    return this.carsService.findAll();
+  findAll(@Query() query: any) {
+    return this.carsService.findAll(query);
   }
 
   @ApiBearerAuth()
@@ -56,6 +67,17 @@ export class CarsController {
   }
 
   @ApiBearerAuth()
+  @ApiOkResponse({ type: Car })
+  @ApiUnauthorizedResponse()
+  @ApiCreatedResponse({ type: Car })
+  @UseGuards(JwtAuthGuard)
+  @Post()
+  create(@Body() createCarDto: CreateCarDto) {
+    return this.carsService.create(createCarDto);
+  }
+
+  @ApiBearerAuth()
+  @ApiCreatedResponse({ type: Car })
   @ApiUnauthorizedResponse()
   @ApiOkResponse({ type: Car })
   @ApiNotFoundResponse()
@@ -66,6 +88,7 @@ export class CarsController {
   }
 
   @ApiBearerAuth()
+  @ApiCreatedResponse({ type: Car })
   @ApiUnauthorizedResponse()
   @ApiOkResponse({ type: Car })
   @ApiNotFoundResponse()
