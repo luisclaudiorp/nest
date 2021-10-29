@@ -18,11 +18,11 @@ export class User {
   @ApiProperty()
   nome: string;
 
-  @Column({ nullable: false, type: 'varchar', length: 11 })
+  @Column({ nullable: false, type: 'varchar', length: 14 })
   @ApiProperty()
   cpf: string;
 
-  @Column({ nullable: false, type: 'varchar', length: 11 })
+  @Column({ nullable: false, type: 'varchar', length: 10 })
   @ApiProperty()
   data_nascimento: string;
 
@@ -30,7 +30,7 @@ export class User {
   @ApiProperty()
   email: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, select: false })
   @ApiProperty()
   senha: string;
 

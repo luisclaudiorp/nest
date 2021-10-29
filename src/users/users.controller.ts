@@ -23,6 +23,7 @@ import {
 } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
 import { Pagination } from 'nestjs-typeorm-paginate';
+import { JoiPipe } from 'nestjs-joi';
 
 @Controller('api/v1/people')
 @ApiTags('People')
@@ -57,14 +58,14 @@ export class UsersController {
   @ApiCreatedResponse({ type: User })
   @ApiBadRequestResponse()
   @Post()
-  async create(@Body() createUserDto: CreateUserDto) {
+  async create(@Body(JoiPipe) createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
 
   @ApiOkResponse({ type: User })
   @ApiNotFoundResponse()
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  update(@Param('id') id: string, @Body(JoiPipe) updateUserDto: UpdateUserDto) {
     return this.usersService.update(+id, updateUserDto);
   }
 

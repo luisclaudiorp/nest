@@ -1,30 +1,49 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsString, MinLength } from 'class-validator';
+import { CREATE, JoiSchema, JoiSchemaOptions } from 'nestjs-joi';
+import * as Joi from 'joi';
 
+@JoiSchemaOptions({
+  allowUnknown: false,
+})
 export class CreateUserDto {
   @ApiProperty()
+  @JoiSchema(Joi.string().alphanum().min(2).max(30).required())
+  @JoiSchema([CREATE], Joi.string().required())
   @IsString()
   nome: string;
 
   @ApiProperty()
+  @JoiSchema(Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required())
+  @JoiSchema(
+    [CREATE],
+    Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required(),
+  )
   @IsString()
   @MinLength(6)
   senha: string;
 
   @ApiProperty()
+  @JoiSchema(Joi.string().length(11).required())
+  @JoiSchema([CREATE], Joi.string().length(11).required())
   @IsString()
   cpf: string;
 
   @ApiProperty()
-  @IsString()
+  @JoiSchema(Joi.string().required())
+  @JoiSchema([CREATE], Joi.string().required())
   data_nascimento: string;
 
   @ApiProperty()
+  @JoiSchema(Joi.string().email().required())
+  @JoiSchema([CREATE], Joi.string().email().required())
   @IsString()
   @IsEmail()
   email: string;
 
   @ApiProperty()
+  @JoiSchema(Joi.string().required())
+  @JoiSchema([CREATE], Joi.string().valid('sim', 'nao').required())
   @IsString()
   habilitado: string;
 }

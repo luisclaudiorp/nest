@@ -32,7 +32,7 @@ export class Car {
 
   @Column({ nullable: false, type: 'int' })
   @ApiProperty()
-  quantidadePassagerios: string;
+  quantidadePassagerios: number;
 
   @CreateDateColumn()
   data_criacao: Date;

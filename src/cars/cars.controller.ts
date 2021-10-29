@@ -10,6 +10,8 @@ import {
   DefaultValuePipe,
   ParseIntPipe,
   Query,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { CarsService } from './cars.service';
 import { CreateCarDto } from './dto/create-car.dto';
@@ -65,6 +67,7 @@ export class CarsController {
   @ApiCreatedResponse({ type: Car })
   @UseGuards(JwtAuthGuard)
   @Post()
+  @UsePipes(new ValidationPipe())
   create(@Body() createCarDto: CreateCarDto) {
     return this.carsService.create(createCarDto);
   }
@@ -76,6 +79,7 @@ export class CarsController {
   @ApiNotFoundResponse()
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
+  @UsePipes(new ValidationPipe())
   update(@Param('id') id: string, @Body() updateCarDto: UpdateCarDto) {
     return this.carsService.update(+id, updateCarDto);
   }
