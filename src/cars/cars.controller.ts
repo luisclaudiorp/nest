@@ -27,7 +27,7 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { Pagination } from 'nestjs-typeorm-paginate';
+import { paginatedSerialize } from 'src/serialize/serialize';
 
 @Controller('/api/v1/car')
 @ApiTags('Car')
@@ -41,14 +41,14 @@ export class CarsController {
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page = 1,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit = 10,
     @Query() query: any,
-  ): Promise<Pagination<Car>> {
+  ): Promise<object> {
     limit = limit > 100 ? 100 : limit;
     const options = {
       page,
       limit,
-      route: 'api/v1/people',
     };
-    return this.carsService.paginate(options, query);
+    const result = await this.carsService.paginate(options, query);
+    return paginatedSerialize(result);
   }
 
   @ApiBearerAuth()

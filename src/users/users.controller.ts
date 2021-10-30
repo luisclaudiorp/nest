@@ -22,8 +22,8 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
-import { Pagination } from 'nestjs-typeorm-paginate';
 import { JoiPipe } from 'nestjs-joi';
+import { paginatedSerialize } from 'src/serialize/serialize';
 
 @Controller('api/v1/people')
 @ApiTags('People')
@@ -35,16 +35,15 @@ export class UsersController {
   @Get('')
   async index(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page = 1,
-    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit = 10,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit = 100,
     @Query() query: any,
-  ): Promise<Pagination<User>> {
-    limit = limit > 100 ? 100 : limit;
+  ): Promise<object> {
     const options = {
       page,
       limit,
-      route: 'api/v1/people',
     };
-    return this.usersService.paginate(options, query);
+    const result = await this.usersService.paginate(options, query);
+    return paginatedSerialize(result);
   }
 
   @ApiOkResponse({ type: User })
