@@ -40,7 +40,7 @@ export class CarsController {
   async index(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page = 1,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit = 10,
-    @Query() query: any,
+    @Query() query: object,
   ): Promise<object> {
     limit = limit > 100 ? 100 : limit;
     const options = {

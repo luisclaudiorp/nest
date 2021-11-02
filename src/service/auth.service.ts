@@ -3,6 +3,12 @@ import { UsersService } from './users.service';
 import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/model/user.entity';
 
+interface Login {
+  email?: string;
+  sub?: string;
+  id?: string;
+}
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -10,7 +16,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(userEmail: string, userPass: string): Promise<object> {
+  async validateUser(userEmail: string, userPass: string): Promise<User> {
     const user = await this.usersService.findByEmail(userEmail);
     if (user && user.senha === userPass && user.habilitado === 'sim') {
       delete user.senha;
@@ -19,7 +25,7 @@ export class AuthService {
     return null;
   }
 
-  async login(user: User) {
+  async login(user: Login) {
     const payload = { email: user.email, sub: user.id };
     return {
       access_token: this.jwtService.sign(payload),

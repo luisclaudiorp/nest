@@ -13,7 +13,7 @@ import { validateCpf } from 'helper/validateCpf';
 import { validateDate } from 'helper/validadeDate';
 import { clear } from 'helper/clear';
 
-export type UserType = any;
+export type UserType = object;
 
 @Injectable()
 export class UsersService {

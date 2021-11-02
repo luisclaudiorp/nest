@@ -36,7 +36,7 @@ export class UsersController {
   async index(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page = 1,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit = 100,
-    @Query() query: any,
+    @Query() query: object,
   ): Promise<object> {
     const options = {
       page,
