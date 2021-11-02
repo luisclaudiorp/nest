@@ -11,10 +11,10 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { AuthDto } from './auth/dto/auth.dto';
-import { AuthService } from './auth/shared/auth.service';
-import { JwtAuthGuard } from './auth/shared/jwt-auth.guard';
-import { LocalAuthGuard } from './auth/shared/local-auth.guard';
+import { AuthDto } from '../validation/auth/auth.dto';
+import { AuthService } from '../service/auth.service';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { LocalAuthGuard } from '../auth/local-auth.guard';
 
 @Controller('api/v1')
 @ApiTags('Auth')

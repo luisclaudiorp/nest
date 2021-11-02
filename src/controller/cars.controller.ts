@@ -13,11 +13,11 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { CarsService } from './cars.service';
-import { CreateCarDto } from './dto/create-car.dto';
-import { UpdateCarDto } from './dto/update-car.dto';
-import { JwtAuthGuard } from 'src/auth/shared/jwt-auth.guard';
-import { Car } from './entities/car.entity';
+import { CarsService } from '../service/cars.service';
+import { CreateCarDto } from '../validation/cars/create-car.dto';
+import { UpdateCarDto } from '../validation/cars/update-car.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { Car } from '../model/car.entity';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,

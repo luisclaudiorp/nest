@@ -7,12 +7,12 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { Car } from 'src/cars/entities/car.entity';
+import { Car } from 'src/model/car.entity';
 
 @Entity()
 export class Acessorio {
   @PrimaryGeneratedColumn()
-  @Column({ primary: true, select: false })
+  @Column({ primary: true })
   id: number;
 
   @ApiProperty()
@@ -27,4 +27,5 @@ export class Acessorio {
 
   @ManyToOne(() => Car, (c) => c.acessorios)
   car: Car;
+  acessorio: Car[];
 }

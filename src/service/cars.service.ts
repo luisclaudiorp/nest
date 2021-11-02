@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateCarDto } from './dto/create-car.dto';
-import { UpdateCarDto } from './dto/update-car.dto';
-import { Car } from './entities/car.entity';
-import { Acessorio } from './entities/acessorios.entity';
+import { CreateCarDto } from '../validation/cars/create-car.dto';
+import { UpdateCarDto } from '../validation/cars/update-car.dto';
+import { Car } from '../model/car.entity';
+import { Acessorio } from '../model/acessorios.entity';
 import {
   IPaginationOptions,
   Pagination,

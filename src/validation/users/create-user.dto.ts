@@ -8,8 +8,8 @@ import * as Joi from 'joi';
 })
 export class CreateUserDto {
   @ApiProperty()
-  @JoiSchema(Joi.string().alphanum().min(2).max(30).required())
-  @JoiSchema([CREATE], Joi.string().required())
+  @JoiSchema(Joi.string().trim().alphanum().min(2).max(30).required())
+  @JoiSchema([CREATE], Joi.string().trim().required())
   @IsString()
   nome: string;
 
@@ -24,19 +24,19 @@ export class CreateUserDto {
   senha: string;
 
   @ApiProperty()
-  @JoiSchema(Joi.string().length(11).required())
-  @JoiSchema([CREATE], Joi.string().length(11).required())
+  @JoiSchema(Joi.string().trim().length(11).required())
+  @JoiSchema([CREATE], Joi.string().trim().length(11).required())
   @IsString()
   cpf: string;
 
   @ApiProperty()
-  @JoiSchema(Joi.string().required())
-  @JoiSchema([CREATE], Joi.string().required())
+  @JoiSchema(Joi.string().trim().required())
+  @JoiSchema([CREATE], Joi.string().trim().required())
   data_nascimento: string;
 
   @ApiProperty()
-  @JoiSchema(Joi.string().email().required())
-  @JoiSchema([CREATE], Joi.string().email().required())
+  @JoiSchema(Joi.string().trim().email().required())
+  @JoiSchema([CREATE], Joi.string().trim().email().required())
   @IsString()
   @IsEmail()
   email: string;

@@ -10,9 +10,9 @@ import {
   DefaultValuePipe,
   ParseIntPipe,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UsersService } from '../service/users.service';
+import { CreateUserDto } from '../validation/users/create-user.dto';
+import { UpdateUserDto } from '../validation/users/update-user.dto';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
@@ -21,7 +21,7 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-import { User } from './entities/user.entity';
+import { User } from '../model/user.entity';
 import { JoiPipe } from 'nestjs-joi';
 import { paginatedSerialize } from 'src/serialize/serialize';
 

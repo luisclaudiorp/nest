@@ -6,8 +6,8 @@ import { JoiSchema, UPDATE } from 'nestjs-joi';
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {
   @ApiProperty()
-  @JoiSchema(Joi.string().alphanum().min(2).max(30))
-  @JoiSchema([UPDATE], Joi.string().alphanum().min(2).max(30).optional())
+  @JoiSchema(Joi.string().trim().alphanum().min(2).max(30))
+  @JoiSchema([UPDATE], Joi.string().trim().alphanum().min(2).max(30).optional())
   @IsString()
   nome: string;
 
@@ -19,38 +19,42 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   senha: string;
 
   @ApiProperty()
-  @JoiSchema(Joi.string().length(11))
-  @JoiSchema([UPDATE], Joi.string().length(11))
+  @JoiSchema(Joi.string().trim().length(11))
+  @JoiSchema([UPDATE], Joi.string().trim().length(11))
   @IsString()
   cpf: string;
 
   @ApiProperty()
-  @JoiSchema(Joi.string().required())
-  @JoiSchema([UPDATE], Joi.string().required())
+  @JoiSchema(Joi.string().trim().required())
+  @JoiSchema([UPDATE], Joi.string().trim().required())
   @IsString()
   data_nascimento: string;
 
   @ApiProperty()
   @JoiSchema(
-    Joi.string().email({
-      minDomainSegments: 2,
-      tlds: { allow: ['com', 'net', 'br'] },
-    }),
+    Joi.string()
+      .trim()
+      .email({
+        minDomainSegments: 2,
+        tlds: { allow: ['com', 'net', 'br'] },
+      }),
   )
   @JoiSchema(
     [UPDATE],
-    Joi.string().email({
-      minDomainSegments: 2,
-      tlds: { allow: ['com', 'net', 'br'] },
-    }),
+    Joi.string()
+      .trim()
+      .email({
+        minDomainSegments: 2,
+        tlds: { allow: ['com', 'net', 'br'] },
+      }),
   )
   @IsString()
   @IsEmail()
   email: string;
 
   @ApiProperty()
-  @JoiSchema(Joi.string().valid('sim', 'nao'))
-  @JoiSchema([UPDATE], Joi.string().valid('sim', 'nao'))
+  @JoiSchema(Joi.string().trim().valid('sim', 'nao'))
+  @JoiSchema([UPDATE], Joi.string().trim().valid('sim', 'nao'))
   @IsString()
   habilitado: string;
 }
