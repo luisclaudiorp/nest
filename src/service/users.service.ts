@@ -12,6 +12,7 @@ import {
 import { validateCpf } from 'helper/validateCpf';
 import { validateDate } from 'helper/validadeDate';
 import { clear } from 'helper/clear';
+import { GetUserDto } from 'src/validation/users/get-user.dto';
 
 export type UserType = object;
 
@@ -24,7 +25,7 @@ export class UsersService {
 
   async paginate(
     options: IPaginationOptions,
-    query: object,
+    query: GetUserDto,
   ): Promise<Pagination<User>> {
     clear(query);
     return paginate<User>(this.usersRepository, options, {
@@ -33,9 +34,19 @@ export class UsersService {
   }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const obj = await this.findByCpf(createUserDto.cpf);
+    const userCpf = validateCpf(createUserDto.cpf);
+    const obj = await this.findByCpf(userCpf);
     if (typeof obj === 'undefined') {
       const userCpf = validateCpf(createUserDto.cpf);
+      if (!this.findByEmail(createUserDto.email)) {
+        throw new HttpException(
+          {
+            status: HttpStatus.BAD_REQUEST,
+            error: 'Email already em use',
+          },
+          HttpStatus.BAD_REQUEST,
+        );
+      }
       createUserDto.cpf = userCpf;
       validateDate(createUserDto.data_nascimento);
       const newUser = this.usersRepository.create(createUserDto);
@@ -50,16 +61,12 @@ export class UsersService {
     );
   }
 
-  findAll(query?: object): Promise<User[]> {
-    return this.usersRepository.find(query);
-  }
-
   async findOneById(id: number): Promise<User> {
     return await this.usersRepository.findOneOrFail(id);
   }
 
   async findByEmail(email: string): Promise<User> {
-    return await this.usersRepository.findOneOrFail(
+    return await this.usersRepository.findOne(
       { email },
       { select: ['senha', 'email', 'id', 'habilitado'] },
     );

@@ -38,9 +38,9 @@ export class User {
   @ApiProperty()
   habilitado: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ select: false })
   data_criacao: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ select: false })
   data_atualizacao: Date;
 }

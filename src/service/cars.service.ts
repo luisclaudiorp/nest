@@ -10,6 +10,7 @@ import {
   Pagination,
   paginate,
 } from 'nestjs-typeorm-paginate';
+import { GetCarDto } from 'src/validation/cars/get-car.dto';
 
 @Injectable()
 export class CarsService {
@@ -22,7 +23,7 @@ export class CarsService {
 
   async paginate(
     options: IPaginationOptions,
-    query: object,
+    query: GetCarDto,
   ): Promise<Pagination<Car>> {
     this.clear(query);
     return paginate<Car>(this.carsRepository, options, {

@@ -24,8 +24,8 @@ export class CreateUserDto {
   senha: string;
 
   @ApiProperty()
-  @JoiSchema(Joi.string().trim().length(11).required())
-  @JoiSchema([CREATE], Joi.string().trim().length(11).required())
+  @JoiSchema(Joi.string().trim().length(14).required())
+  @JoiSchema([CREATE], Joi.string().trim().length(14).required())
   @IsString()
   cpf: string;
 

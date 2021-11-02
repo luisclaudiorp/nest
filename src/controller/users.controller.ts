@@ -18,25 +18,25 @@ import {
   ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
-  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
 import { User } from '../model/user.entity';
 import { JoiPipe } from 'nestjs-joi';
 import { paginatedSerialize } from 'src/serialize/serialize';
+import { GetUserDto } from 'src/validation/users/get-user.dto';
+import { IdUserDto } from 'src/validation/users/id-user.dto';
 
 @Controller('api/v1/people')
 @ApiTags('People')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @ApiOkResponse({ type: User, isArray: true })
-  @ApiQuery({ name: 'query parans', required: false })
+  @ApiOkResponse({ type: GetUserDto, isArray: true })
   @Get('')
   async index(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page = 1,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit = 100,
-    @Query() query: object,
+    @Query() query: GetUserDto,
   ): Promise<object> {
     const options = {
       page,
@@ -50,7 +50,7 @@ export class UsersController {
   @ApiNotFoundResponse()
   @ApiOkResponse({ type: User })
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: IdUserDto) {
     return this.usersService.findOneById(+id);
   }
 
@@ -64,14 +64,17 @@ export class UsersController {
   @ApiOkResponse({ type: User })
   @ApiNotFoundResponse()
   @Patch(':id')
-  update(@Param('id') id: string, @Body(JoiPipe) updateUserDto: UpdateUserDto) {
+  update(
+    @Param('id') id: IdUserDto,
+    @Body(JoiPipe) updateUserDto: UpdateUserDto,
+  ) {
     return this.usersService.update(+id, updateUserDto);
   }
 
   @ApiOkResponse({ type: User })
   @ApiNotFoundResponse()
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: IdUserDto) {
     return this.usersService.remove(+id);
   }
 }

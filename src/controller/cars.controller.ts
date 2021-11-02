@@ -23,24 +23,27 @@ import {
   ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
-  ApiQuery,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { paginatedSerialize } from 'src/serialize/serialize';
+import { GetCarDto } from 'src/validation/cars/get-car.dto';
+import { IdCarDto } from 'src/validation/cars/id-car.dto';
 
 @Controller('/api/v1/car')
 @ApiTags('Car')
 export class CarsController {
   constructor(private readonly carsService: CarsService) {}
 
+  @ApiBearerAuth()
+  @ApiUnauthorizedResponse()
+  @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: Car, isArray: true })
-  @ApiQuery({ name: 'query parans', required: false })
   @Get('')
   async index(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page = 1,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit = 10,
-    @Query() query: object,
+    @Query() query: GetCarDto,
   ): Promise<object> {
     limit = limit > 100 ? 100 : limit;
     const options = {
@@ -57,7 +60,7 @@ export class CarsController {
   @ApiNotFoundResponse()
   @UseGuards(JwtAuthGuard)
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: IdCarDto) {
     return this.carsService.findOneById(+id);
   }
 
@@ -73,25 +76,23 @@ export class CarsController {
   }
 
   @ApiBearerAuth()
-  @ApiCreatedResponse({ type: Car })
   @ApiUnauthorizedResponse()
   @ApiOkResponse({ type: Car })
   @ApiNotFoundResponse()
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
   @UsePipes(new ValidationPipe())
-  update(@Param('id') id: string, @Body() updateCarDto: UpdateCarDto) {
+  update(@Param('id') id: IdCarDto, @Body() updateCarDto: UpdateCarDto) {
     return this.carsService.update(+id, updateCarDto);
   }
 
   @ApiBearerAuth()
-  @ApiCreatedResponse({ type: Car })
   @ApiUnauthorizedResponse()
   @ApiOkResponse({ type: Car })
   @ApiNotFoundResponse()
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: IdCarDto) {
     return this.carsService.remove(+id);
   }
 }

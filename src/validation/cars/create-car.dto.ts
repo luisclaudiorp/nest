@@ -6,7 +6,7 @@ import { Acessorio } from '../../model/acessorios.entity';
 
 export class CreateCarDto {
   @ApiProperty()
-  @JoiSchema(Joi.string().trim().required())
+  @JoiSchema(Joi.string().trim().alphanum().trim().required())
   @IsString()
   modelo: string;
 
