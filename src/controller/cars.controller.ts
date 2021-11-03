@@ -34,13 +34,17 @@ import { Acessorio } from 'src/model/acessories.entity';
 export class CarsController {
   constructor(private readonly carsService: CarsService) {}
 
-  @Get(':idCar/acessorios/:idAcessorio')
-  get(
+  @Patch(':idCar/acessorios/:idAcessorio')
+  patch(
     @Param('idCar') idCar: string,
     @Param('idAcessorio') idAcessorio: string,
-  ): Promise<void> {
-    //console.log(idCar, idAcessorio);
-    return this.carsService.findAcessorioByCar(idCar, idAcessorio);
+    @Body() description: Acessorio,
+  ): Promise<boolean> {
+    return this.carsService.updatAcessorioByCar(
+      idCar,
+      idAcessorio,
+      description,
+    );
   }
 
   @ApiBearerAuth()

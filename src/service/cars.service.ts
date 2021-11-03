@@ -13,6 +13,7 @@ import {
 import { GetCarDto } from 'src/validation/cars/get-car.dto';
 import { IdAllDto } from 'src/validation/id-all.dto';
 import { clear } from 'helper/clear';
+import { NotFoundError } from 'src/errors/notFoundError';
 
 @Injectable()
 export class CarsService {
@@ -23,15 +24,20 @@ export class CarsService {
     private acessorioRepository: Repository<Acessorio>,
   ) {}
 
-  async findAcessorioByCar(idCar: string, idAcessorio: string): Promise<void> {
-    //console.log(idCar, idAcessorio);
-    const car = await this.carsRepository.findOne(idCar, {
-      relations: ['acessorios'],
+  async updatAcessorioByCar(
+    idCar: string,
+    idAcessorio: string,
+    description: Acessorio,
+  ): Promise<boolean> {
+    const car = await this.acessorioRepository.findOne({
+      where: { id: idAcessorio, carId: idCar },
     });
-    console.log(car.acessorios);
-    //.acessorio.map((acessorio: any) => console.log(acessorio));
-    //const acessorio = await this.acessorioRepository.findOne(idAcessorio);
-    console.log(idAcessorio);
+    if (!car) {
+      throw new NotFoundError('Nao encontrado');
+    }
+    console.log(car);
+    await this.acessorioRepository.update(idAcessorio, description);
+    return true;
   }
 
   async paginate(

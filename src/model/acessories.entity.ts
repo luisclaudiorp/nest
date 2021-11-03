@@ -28,4 +28,7 @@ export class Acessorio {
   @ManyToOne(() => Car, (c) => c.acessorios)
   car: Car;
   acessorio: Car[];
+
+  @Column()
+  carId?: number;
 }
