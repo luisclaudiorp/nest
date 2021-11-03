@@ -10,5 +10,6 @@ import { JoiPipeModule } from 'nestjs-joi';
   imports: [TypeOrmModule.forFeature([Car, Acessorio]), JoiPipeModule],
   controllers: [CarsController],
   providers: [CarsService],
+  exports: [CarsService],
 })
 export class CarsModule {}

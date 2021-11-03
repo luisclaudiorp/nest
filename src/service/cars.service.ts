@@ -11,6 +11,8 @@ import {
   paginate,
 } from 'nestjs-typeorm-paginate';
 import { GetCarDto } from 'src/validation/cars/get-car.dto';
+import { IdAllDto } from 'src/validation/id-all.dto';
+import { clear } from 'helper/clear';
 
 @Injectable()
 export class CarsService {
@@ -21,11 +23,22 @@ export class CarsService {
     private acessorioRepository: Repository<Acessorio>,
   ) {}
 
+  async findAcessorioByCar(idCar: string, idAcessorio: string): Promise<void> {
+    //console.log(idCar, idAcessorio);
+    const car = await this.carsRepository.findOne(idCar, {
+      relations: ['acessorios'],
+    });
+    console.log(car.acessorios);
+    //.acessorio.map((acessorio: any) => console.log(acessorio));
+    //const acessorio = await this.acessorioRepository.findOne(idAcessorio);
+    console.log(idAcessorio);
+  }
+
   async paginate(
     options: IPaginationOptions,
     query: GetCarDto,
   ): Promise<Pagination<Car>> {
-    this.clear(query);
+    clear(query);
     return paginate<Car>(this.carsRepository, options, {
       where: query,
       relations: ['acessorios'],
@@ -46,7 +59,7 @@ export class CarsService {
     return await this.carsRepository.findOne(newCar.id);
   }
 
-  async findOneById(id: number): Promise<Car> {
+  async findOneById(id: IdAllDto): Promise<Car> {
     try {
       return await this.carsRepository.findOneOrFail(id);
     } catch (error) {
@@ -54,7 +67,7 @@ export class CarsService {
     }
   }
 
-  async update(id: number, UpdateCarDto: UpdateCarDto): Promise<Car> {
+  async update(id: IdAllDto, UpdateCarDto: UpdateCarDto): Promise<Car> {
     try {
       const car = await this.findOneById(id);
       const { acessorios, ...data } = UpdateCarDto;
@@ -65,19 +78,12 @@ export class CarsService {
     }
   }
 
-  async remove(id: number): Promise<Car> {
+  async remove(id: IdAllDto): Promise<Car> {
     try {
       const Car = await this.findOneById(id);
       return await this.carsRepository.remove(Car);
     } catch (error) {
       throw error;
     }
-  }
-
-  clear(obj: object) {
-    Object.keys(obj).forEach((key) => {
-      if (obj[key] === obj['page'] || obj['limit']) delete obj[key];
-    });
-    return obj;
   }
 }

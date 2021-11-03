@@ -10,8 +10,6 @@ import {
   DefaultValuePipe,
   ParseIntPipe,
   Query,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import { CarsService } from '../service/cars.service';
 import { CreateCarDto } from '../validation/cars/create-car.dto';
@@ -29,18 +27,27 @@ import {
 import { GetCarDto } from 'src/validation/cars/get-car.dto';
 import { IdAllDto } from 'src/validation/id-all.dto';
 import { paginatedSerializeCar } from 'src/serialize/serializeCar';
+import { Acessorio } from 'src/model/acessories.entity';
 
 @Controller('/api/v1/car')
 @ApiTags('Car')
 export class CarsController {
   constructor(private readonly carsService: CarsService) {}
 
+  @Get(':idCar/acessorios/:idAcessorio')
+  get(
+    @Param('idCar') idCar: string,
+    @Param('idAcessorio') idAcessorio: string,
+  ): Promise<void> {
+    //console.log(idCar, idAcessorio);
+    return this.carsService.findAcessorioByCar(idCar, idAcessorio);
+  }
+
   @ApiBearerAuth()
   @ApiUnauthorizedResponse()
   @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: Car, isArray: true })
   @Get('')
-  @UsePipes(new ValidationPipe())
   async index(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page = 1,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit = 10,
@@ -61,9 +68,8 @@ export class CarsController {
   @ApiNotFoundResponse()
   @UseGuards(JwtAuthGuard)
   @Get(':id')
-  @UsePipes(new ValidationPipe())
-  findOne(@Param('id') id: IdAllDto) {
-    return this.carsService.findOneById(+id);
+  findOne(@Param() id: IdAllDto) {
+    return this.carsService.findOneById(id);
   }
 
   @ApiBearerAuth()
@@ -72,7 +78,6 @@ export class CarsController {
   @ApiCreatedResponse({ type: Car })
   @UseGuards(JwtAuthGuard)
   @Post()
-  @UsePipes(new ValidationPipe())
   create(@Body() createCarDto: CreateCarDto) {
     return this.carsService.create(createCarDto);
   }
@@ -83,9 +88,8 @@ export class CarsController {
   @ApiNotFoundResponse()
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
-  @UsePipes(new ValidationPipe())
-  update(@Param('id') id: IdAllDto, @Body() updateCarDto: UpdateCarDto) {
-    return this.carsService.update(+id, updateCarDto);
+  update(@Param() id: IdAllDto, @Body() updateCarDto: UpdateCarDto) {
+    return this.carsService.update(id, updateCarDto);
   }
 
   @ApiBearerAuth()
@@ -94,8 +98,7 @@ export class CarsController {
   @ApiNotFoundResponse()
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  @UsePipes(new ValidationPipe())
-  remove(@Param('id') id: IdAllDto) {
-    return this.carsService.remove(+id);
+  remove(@Param() id: IdAllDto) {
+    return this.carsService.remove(id);
   }
 }
