@@ -14,6 +14,7 @@ import { validateDate } from 'helper/validadeDate';
 import { clear } from 'helper/clear';
 import { GetUserDto } from 'src/validation/users/get-user.dto';
 import { IdAllDto } from 'src/validation/id-all.dto';
+import { BadRequestError } from 'src/errors/badRequestError';
 
 export type UserType = object;
 
@@ -40,26 +41,14 @@ export class UsersService {
     if (typeof obj === 'undefined') {
       const userCpf = validateCpf(createUserDto.cpf);
       if (!this.findByEmail(createUserDto.email)) {
-        throw new HttpException(
-          {
-            status: HttpStatus.BAD_REQUEST,
-            error: 'Email already em use',
-          },
-          HttpStatus.BAD_REQUEST,
-        );
+        throw new BadRequestError('E-MAIL');
       }
       createUserDto.cpf = userCpf;
       validateDate(createUserDto.data_nascimento);
       const newUser = this.usersRepository.create(createUserDto);
       return this.usersRepository.save(newUser);
     }
-    throw new HttpException(
-      {
-        status: HttpStatus.BAD_REQUEST,
-        error: 'CPF already em use',
-      },
-      HttpStatus.BAD_REQUEST,
-    );
+    throw new BadRequestError('CPF');
   }
 
   async findOneById(id: IdAllDto): Promise<User> {

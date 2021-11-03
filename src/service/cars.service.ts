@@ -33,7 +33,7 @@ export class CarsService {
       where: { id: idAcessorio, carId: idCar },
     });
     if (!car) {
-      throw new NotFoundError('Nao encontrado');
+      throw new NotFoundError();
     }
     console.log(car);
     await this.acessorioRepository.update(idAcessorio, description);
