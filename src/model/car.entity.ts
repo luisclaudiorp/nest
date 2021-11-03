@@ -7,7 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { Acessorio } from './acessorios.entity';
+import { Acessorio } from './acessories.entity';
 
 @Entity()
 export class Car {

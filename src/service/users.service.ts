@@ -13,6 +13,7 @@ import { validateCpf } from 'helper/validateCpf';
 import { validateDate } from 'helper/validadeDate';
 import { clear } from 'helper/clear';
 import { GetUserDto } from 'src/validation/users/get-user.dto';
+import { IdAllDto } from 'src/validation/id-all.dto';
 
 export type UserType = object;
 
@@ -61,7 +62,7 @@ export class UsersService {
     );
   }
 
-  async findOneById(id: number): Promise<User> {
+  async findOneById(id: IdAllDto): Promise<User> {
     return await this.usersRepository.findOneOrFail(id);
   }
 
@@ -76,7 +77,7 @@ export class UsersService {
     return await this.usersRepository.findOne({ cpf });
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
+  async update(id: IdAllDto, updateUserDto: UpdateUserDto): Promise<User> {
     const user = await this.findOneById(id);
     const newCpf = validateCpf(user.cpf);
     user.cpf = newCpf;
@@ -84,7 +85,7 @@ export class UsersService {
     return await this.usersRepository.save(user);
   }
 
-  async remove(id: number): Promise<User> {
+  async remove(id: IdAllDto): Promise<User> {
     const user = await this.findOneById(id);
     return await this.usersRepository.remove(user);
   }

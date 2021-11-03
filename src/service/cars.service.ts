@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { CreateCarDto } from '../validation/cars/create-car.dto';
 import { UpdateCarDto } from '../validation/cars/update-car.dto';
 import { Car } from '../model/car.entity';
-import { Acessorio } from '../model/acessorios.entity';
+import { Acessorio } from '../model/acessories.entity';
 import {
   IPaginationOptions,
   Pagination,

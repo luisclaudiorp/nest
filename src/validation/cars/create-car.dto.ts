@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsInt, IsString, Max, Min } from 'class-validator';
 import * as Joi from 'joi';
 import { JoiSchema } from 'nestjs-joi';
-import { Acessorio } from '../../model/acessorios.entity';
+import { Acessorio } from '../../model/acessories.entity';
 
 export class CreateCarDto {
   @ApiProperty()
@@ -23,7 +23,7 @@ export class CreateCarDto {
   ano: number;
 
   @ApiProperty()
-  @JoiSchema(Joi.object().required())
+  @JoiSchema(Joi.array().required())
   acessorios: Acessorio[];
 
   @ApiProperty()

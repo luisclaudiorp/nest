@@ -26,9 +26,9 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { paginatedSerialize } from 'src/serialize/serialize';
 import { GetCarDto } from 'src/validation/cars/get-car.dto';
-import { IdCarDto } from 'src/validation/cars/id-car.dto';
+import { IdAllDto } from 'src/validation/id-all.dto';
+import { paginatedSerializeCar } from 'src/serialize/serializeCar';
 
 @Controller('/api/v1/car')
 @ApiTags('Car')
@@ -40,6 +40,7 @@ export class CarsController {
   @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: Car, isArray: true })
   @Get('')
+  @UsePipes(new ValidationPipe())
   async index(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page = 1,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit = 10,
@@ -51,7 +52,7 @@ export class CarsController {
       limit,
     };
     const result = await this.carsService.paginate(options, query);
-    return paginatedSerialize(result);
+    return paginatedSerializeCar(result);
   }
 
   @ApiBearerAuth()
@@ -60,7 +61,8 @@ export class CarsController {
   @ApiNotFoundResponse()
   @UseGuards(JwtAuthGuard)
   @Get(':id')
-  findOne(@Param('id') id: IdCarDto) {
+  @UsePipes(new ValidationPipe())
+  findOne(@Param('id') id: IdAllDto) {
     return this.carsService.findOneById(+id);
   }
 
@@ -82,7 +84,7 @@ export class CarsController {
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
   @UsePipes(new ValidationPipe())
-  update(@Param('id') id: IdCarDto, @Body() updateCarDto: UpdateCarDto) {
+  update(@Param('id') id: IdAllDto, @Body() updateCarDto: UpdateCarDto) {
     return this.carsService.update(+id, updateCarDto);
   }
 
@@ -92,7 +94,8 @@ export class CarsController {
   @ApiNotFoundResponse()
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  remove(@Param('id') id: IdCarDto) {
+  @UsePipes(new ValidationPipe())
+  remove(@Param('id') id: IdAllDto) {
     return this.carsService.remove(+id);
   }
 }

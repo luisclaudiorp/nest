@@ -1,6 +1,6 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
-import { Acessorio } from '../../model/acessorios.entity';
+import { Acessorio } from '../../model/acessories.entity';
 import { CreateCarDto } from './create-car.dto';
 import * as Joi from 'joi';
 import { JoiSchema } from 'nestjs-joi';
@@ -27,7 +27,7 @@ export class UpdateCarDto extends PartialType(CreateCarDto) {
   ano: number;
 
   @ApiProperty()
-  @JoiSchema(Joi.object().optional())
+  @JoiSchema(Joi.array().optional())
   @IsOptional()
   acessorios: Acessorio[];
 

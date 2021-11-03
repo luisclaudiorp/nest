@@ -35,8 +35,25 @@ export class CreateUserDto {
   data_nascimento: string;
 
   @ApiProperty()
-  @JoiSchema(Joi.string().trim().email().required())
-  @JoiSchema([CREATE], Joi.string().trim().email().required())
+  @JoiSchema(
+    Joi.string()
+      .trim()
+      .email({
+        minDomainSegments: 2,
+        tlds: { allow: ['com', 'net', 'br'] },
+      })
+      .required(),
+  )
+  @JoiSchema(
+    [CREATE],
+    Joi.string()
+      .trim()
+      .email({
+        minDomainSegments: 2,
+        tlds: { allow: ['com', 'net', 'br'] },
+      })
+      .required(),
+  )
   @IsString()
   @IsEmail()
   email: string;

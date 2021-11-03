@@ -9,7 +9,7 @@ const serialize = ({
   return { id, nome, cpf, email, habilitado, data_nascimento };
 };
 
-export const paginatedSerialize = ({ items, meta }): object => {
+export const paginatedSerializePeople = ({ items, meta }): object => {
   return {
     people: items.map(serialize),
     total: meta.totalItems,

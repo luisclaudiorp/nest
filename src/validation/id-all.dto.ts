@@ -1,11 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber } from 'class-validator';
+import { IsNumberString } from 'class-validator';
 import * as Joi from 'joi';
 import { JoiSchema } from 'nestjs-joi';
 
-export class IdCarDto {
+export class IdAllDto {
   @ApiProperty()
   @JoiSchema(Joi.number())
-  @IsNumber()
+  @IsNumberString()
   id: number;
 }
