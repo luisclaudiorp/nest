@@ -32,8 +32,8 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   cpf: string;
 
   @ApiProperty()
-  @JoiSchema(Joi.string().trim().required().optional())
-  @JoiSchema([UPDATE], Joi.string().trim().required().optional())
+  @JoiSchema(Joi.string().trim().optional())
+  @JoiSchema([UPDATE], Joi.string().trim().optional())
   @IsString()
   @IsOptional()
   data_nascimento: string;

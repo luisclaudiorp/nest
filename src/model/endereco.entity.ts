@@ -7,24 +7,36 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { Car } from 'src/model/car.entity';
+import { Rental } from './rental.entity';
 
 @Entity()
-export class Acessorio {
+export class Endereco {
   @PrimaryGeneratedColumn()
   @Column({ primary: true })
   id: number;
 
   @ApiProperty()
   @Column()
-  descricao: string;
+  cep: string;
 
-  @ManyToOne(() => Car, (c) => c.acessorios)
-  car: Car;
-  acessorio: Car[];
+  @ApiProperty()
+  @Column()
+  number: string;
+
+  @ApiProperty()
+  @Column()
+  complemento: string;
+
+  @ApiProperty()
+  @Column()
+  isFilial: boolean;
+
+  @ManyToOne(() => Rental, (c) => c.enderecos)
+  rental: Rental;
+  endereco: Rental[];
 
   @Column()
-  carId?: number;
+  rentalId?: number;
 
   @CreateDateColumn({ select: false })
   data_criacao: Date;

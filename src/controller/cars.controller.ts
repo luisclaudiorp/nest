@@ -34,19 +34,6 @@ import { Acessorio } from 'src/model/acessories.entity';
 export class CarsController {
   constructor(private readonly carsService: CarsService) {}
 
-  @Patch(':idCar/acessorios/:idAcessorio')
-  patch(
-    @Param('idCar') idCar: string,
-    @Param('idAcessorio') idAcessorio: string,
-    @Body() description: Acessorio,
-  ): Promise<boolean> {
-    return this.carsService.updatAcessorioByCar(
-      idCar,
-      idAcessorio,
-      description,
-    );
-  }
-
   @ApiBearerAuth()
   @ApiUnauthorizedResponse()
   @UseGuards(JwtAuthGuard)
@@ -104,5 +91,23 @@ export class CarsController {
   @Delete(':id')
   remove(@Param() id: IdAllDto) {
     return this.carsService.remove(id);
+  }
+
+  @ApiBearerAuth()
+  @ApiUnauthorizedResponse()
+  @ApiOkResponse({ type: Acessorio })
+  @ApiNotFoundResponse()
+  @UseGuards(JwtAuthGuard)
+  @Patch(':idCar/acessorios/:idAcessorio')
+  patch(
+    @Param() idCar: IdAllDto,
+    @Param() idAcessorio: IdAllDto,
+    @Body() description: Acessorio,
+  ): Promise<boolean> {
+    return this.carsService.updatAcessorioByCar(
+      idCar,
+      idAcessorio,
+      description,
+    );
   }
 }

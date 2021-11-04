@@ -12,7 +12,7 @@ import {
 } from 'nestjs-typeorm-paginate';
 import { GetCarDto } from 'src/validation/cars/get-car.dto';
 import { IdAllDto } from 'src/validation/id-all.dto';
-import { clear } from 'helper/clear';
+import { clear } from 'src/helper/clear';
 import { NotFoundError } from 'src/errors/notFoundError';
 
 @Injectable()
@@ -23,22 +23,6 @@ export class CarsService {
     @InjectRepository(Acessorio)
     private acessorioRepository: Repository<Acessorio>,
   ) {}
-
-  async updatAcessorioByCar(
-    idCar: string,
-    idAcessorio: string,
-    description: Acessorio,
-  ): Promise<boolean> {
-    const car = await this.acessorioRepository.findOne({
-      where: { id: idAcessorio, carId: idCar },
-    });
-    if (!car) {
-      throw new NotFoundError();
-    }
-    console.log(car);
-    await this.acessorioRepository.update(idAcessorio, description);
-    return true;
-  }
 
   async paginate(
     options: IPaginationOptions,
@@ -91,5 +75,21 @@ export class CarsService {
     } catch (error) {
       throw error;
     }
+  }
+
+  async updatAcessorioByCar(
+    idCar: IdAllDto,
+    idAcessorio: IdAllDto,
+    description: Acessorio,
+  ): Promise<boolean> {
+    const car = await this.acessorioRepository.findOne({
+      where: { id: idAcessorio, carId: idCar },
+    });
+    if (!car) {
+      throw new NotFoundError('car or acessorie');
+    }
+    console.log(car);
+    await this.acessorioRepository.update(idAcessorio, description);
+    return true;
   }
 }

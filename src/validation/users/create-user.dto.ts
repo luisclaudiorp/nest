@@ -9,8 +9,9 @@ import * as Joi from 'joi';
 export class CreateUserDto {
   @ApiProperty()
   @JoiSchema(Joi.string().trim().alphanum().min(2).max(30).required())
-  @JoiSchema([CREATE], Joi.string().trim().required())
+  @JoiSchema([CREATE], Joi.string().trim().alphanum().min(2).max(30).required())
   @IsString()
+  @MinLength(3)
   nome: string;
 
   @ApiProperty()
@@ -32,6 +33,7 @@ export class CreateUserDto {
   @ApiProperty()
   @JoiSchema(Joi.string().trim().required())
   @JoiSchema([CREATE], Joi.string().trim().required())
+  @IsString()
   data_nascimento: string;
 
   @ApiProperty()
@@ -59,8 +61,8 @@ export class CreateUserDto {
   email: string;
 
   @ApiProperty()
-  @JoiSchema(Joi.string().required())
-  @JoiSchema([CREATE], Joi.string().valid('sim', 'nao').required())
+  @JoiSchema(Joi.string().trim().valid('sim', 'nao').required())
+  @JoiSchema([CREATE], Joi.string().trim().valid('sim', 'nao').required())
   @IsString()
   habilitado: string;
 }

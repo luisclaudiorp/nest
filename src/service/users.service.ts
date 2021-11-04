@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from '../validation/users/create-user.dto';
@@ -9,9 +9,9 @@ import {
   paginate,
   Pagination,
 } from 'nestjs-typeorm-paginate';
-import { validateCpf } from 'helper/validateCpf';
-import { validateDate } from 'helper/validadeDate';
-import { clear } from 'helper/clear';
+import { validateCpf } from 'src/helper/validateCpf';
+import { validateDate } from 'src/helper/validadeDate';
+import { clear } from 'src/helper/clear';
 import { GetUserDto } from 'src/validation/users/get-user.dto';
 import { IdAllDto } from 'src/validation/id-all.dto';
 import { BadRequestError } from 'src/errors/badRequestError';
