@@ -6,17 +6,17 @@ import { Endereco } from 'src/model/endereco.entity';
 
 export class CreateRentalDto {
   @ApiProperty()
-  @JoiSchema(Joi.string().trim().alphanum().trim().required())
+  @JoiSchema(Joi.string().min(6).trim().trim().required())
   @IsString()
   nome: string;
 
   @ApiProperty()
-  @JoiSchema(Joi.string().trim().required())
+  @JoiSchema(Joi.string().trim().length(14).required())
   @IsString()
   cnpj: string;
 
   @ApiProperty()
-  @JoiSchema(Joi.string().trim().required())
+  @JoiSchema(Joi.string().trim().optional())
   @IsString()
   atividades: string;
 

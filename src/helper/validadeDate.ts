@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus } from '@nestjs/common';
+import { AgeError } from 'src/errors/ageError';
 
 export const validateDate = (dateUser: string): number => {
   const dates = dateUser.split('/');
@@ -18,13 +18,7 @@ export const validateDate = (dateUser: string): number => {
     age--;
   }
   if (age < 18) {
-    throw new HttpException(
-      {
-        status: HttpStatus.BAD_REQUEST,
-        error: 'age under 18 years',
-      },
-      HttpStatus.BAD_REQUEST,
-    );
+    throw new AgeError('age under 18 years');
   }
   return age;
 };

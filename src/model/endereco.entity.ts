@@ -28,8 +28,8 @@ export class Endereco {
   complemento: string;
 
   @ApiProperty()
-  @Column()
-  isFilial: boolean;
+  @Column('enum', { enum: ['true', 'false'], default: false })
+  isFilial: string;
 
   @ApiProperty()
   @ManyToOne(() => Rental, (c) => c.enderecos)

@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus } from '@nestjs/common';
+import { InvalidError } from 'src/errors/InvalidError';
 
 const isValidCPF = (cpf: string): boolean => {
   let sum = 0;
@@ -49,11 +49,5 @@ export const validateCpf = (cpfUser: string): string => {
     const cpfFormat = format(cpfUser);
     return cpfFormat;
   }
-  throw new HttpException(
-    {
-      status: HttpStatus.BAD_REQUEST,
-      error: 'CPF not Valid',
-    },
-    HttpStatus.BAD_REQUEST,
-  );
+  throw new InvalidError('CPF not Valid');
 };

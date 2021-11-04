@@ -7,12 +7,12 @@ import { CreateRentalDto } from './create-rental.dto';
 
 export class UpdateRentalDto extends PartialType(CreateRentalDto) {
   @ApiProperty()
-  @JoiSchema(Joi.string().trim().alphanum().optional())
+  @JoiSchema(Joi.string().min(6).trim().optional())
   @IsString()
   nome: string;
 
   @ApiProperty()
-  @JoiSchema(Joi.string().trim().optional())
+  @JoiSchema(Joi.string().trim().length(14).optional())
   @IsString()
   cnpj: string;
 
