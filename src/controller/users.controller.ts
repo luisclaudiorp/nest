@@ -65,7 +65,6 @@ export class UsersController {
   @ApiNotFoundResponse()
   @Patch(':id')
   update(@Param() id: IdAllDto, @Body(JoiPipe) updateUserDto: UpdateUserDto) {
-    console.log(id);
     return this.usersService.update(id, updateUserDto);
   }
 

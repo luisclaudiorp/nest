@@ -17,7 +17,6 @@ import {
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { JoiPipe } from 'nestjs-joi';
 import { Rental } from 'src/model/rental.entity';
 import { IdAllDto } from 'src/validation/id-all.dto';
 import { GetRentalDto } from 'src/validation/rental/get-rental.dto';
@@ -53,21 +52,18 @@ export class RentalController {
     return this.rentalService.findOneById(id);
   }
 
+  @ApiOkResponse({ type: Rental })
   @ApiCreatedResponse({ type: Rental })
   @ApiBadRequestResponse()
   @Post()
-  async create(@Body(JoiPipe) createRentalDto: CreateRentalDto) {
+  create(@Body() createRentalDto: CreateRentalDto) {
     return this.rentalService.create(createRentalDto);
   }
 
   @ApiOkResponse({ type: Rental })
   @ApiNotFoundResponse()
   @Patch(':id')
-  update(
-    @Param() id: IdAllDto,
-    @Body(JoiPipe) updateRentalDto: UpdateRentalDto,
-  ) {
-    console.log(id);
+  update(@Param() id: IdAllDto, @Body() updateRentalDto: UpdateRentalDto) {
     return this.rentalService.update(id, updateRentalDto);
   }
 

@@ -24,10 +24,10 @@ export class Rental {
 
   @Column({ nullable: false, type: 'varchar', length: 100 })
   @ApiProperty()
-  atividades: number;
+  atividades: string;
 
   @OneToMany(() => Endereco, (a) => a.endereco)
-  @ApiProperty()
+  @ApiProperty({ type: () => Endereco })
   enderecos: Endereco;
 
   @CreateDateColumn()

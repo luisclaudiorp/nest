@@ -6,6 +6,7 @@ import {
   Pagination,
 } from 'nestjs-typeorm-paginate';
 import { clear } from 'src/helper/clear';
+import { Endereco } from 'src/model/endereco.entity';
 import { Rental } from 'src/model/rental.entity';
 import { IdAllDto } from 'src/validation/id-all.dto';
 import { GetRentalDto } from 'src/validation/rental/get-rental.dto';
@@ -17,7 +18,9 @@ import { UpdateRentalDto } from '../validation/rental/update-rental.dto';
 export class RentalService {
   constructor(
     @InjectRepository(Rental)
-    private rentalsRepository: Repository<Rental>, // @InjectRepository(Acessorio) // private acessorioRepository: Repository<Acessorio>,
+    private rentalsRepository: Repository<Rental>,
+    @InjectRepository(Endereco)
+    private enderecoRepository: Repository<Endereco>,
   ) {}
 
   async paginate(
@@ -35,13 +38,13 @@ export class RentalService {
     const { enderecos, ...data } = createRentalDto;
     const newRental = this.rentalsRepository.create(data);
     await this.rentalsRepository.save(newRental);
-    // createRentalDto.enderecos.forEach(async (a) => {
-    //   const acessorio = new Acessorio();
-    //   acessorio.descricao = a.descricao;
-    //   acessorio.car = newCar;
-    //   const newAcessorio = this.acessorioRepository.create(acessorio);
-    //   await this.acessorioRepository.save(newAcessorio);
-    // });
+    createRentalDto.enderecos.forEach(async (a) => {
+      let endereco = new Endereco();
+      endereco = a;
+      endereco.rental = newRental;
+      const newEndereco = this.enderecoRepository.create(endereco);
+      await this.enderecoRepository.save(newEndereco);
+    });
     return await this.rentalsRepository.findOne(newRental.id);
   }
 

@@ -31,6 +31,7 @@ export class Endereco {
   @Column()
   isFilial: boolean;
 
+  @ApiProperty()
   @ManyToOne(() => Rental, (c) => c.enderecos)
   rental: Rental;
   endereco: Rental[];
