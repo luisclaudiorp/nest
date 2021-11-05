@@ -44,7 +44,7 @@ export class Endereco {
   uf: string;
 
   @ApiProperty()
-  @Column('enum', { enum: ['true', 'false'], default: false })
+  @Column('enum', { enum: ['true', 'false'], default: false, select: false })
   isFilial: string;
 
   @ManyToOne(() => Rental, (r) => r.enderecos)

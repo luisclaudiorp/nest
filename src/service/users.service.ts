@@ -9,12 +9,12 @@ import {
   paginate,
   Pagination,
 } from 'nestjs-typeorm-paginate';
-import { validateCpf } from 'src/helper/validateCpf';
-import { validateDate } from 'src/helper/validadeDate';
-import { clear } from 'src/helper/clear';
-import { GetUserDto } from 'src/validation/users/get-user.dto';
-import { IdAllDto } from 'src/validation/id-all.dto';
-import { BadRequestError } from 'src/errors/badRequestError';
+import { validateCpf } from '../helper/validateCpf';
+import { validateDate } from '../helper/validadeDate';
+import { clear } from '../helper/clear';
+import { GetUserDto } from '../validation/users/get-user.dto';
+import { IdAllDto } from '../validation/id-all.dto';
+import { BadRequestError } from '../errors/badRequestError';
 
 export type UserType = object;
 
@@ -25,7 +25,7 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  async paginate(
+  paginate(
     options: IPaginationOptions,
     query: GetUserDto,
   ): Promise<Pagination<User>> {

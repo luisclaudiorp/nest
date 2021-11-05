@@ -5,14 +5,14 @@ import {
   paginate,
   Pagination,
 } from 'nestjs-typeorm-paginate';
-import { BadRequestError } from 'src/errors/badRequestError';
-import { getCep } from 'src/helper/cep';
-import { clear } from 'src/helper/clear';
-import { validateCnpj } from 'src/helper/validateCnpj';
-import { Endereco } from 'src/model/endereco.entity';
-import { Rental } from 'src/model/rental.entity';
-import { IdAllDto } from 'src/validation/id-all.dto';
-import { GetRentalDto } from 'src/validation/rental/get-rental.dto';
+import { BadRequestError } from '../errors/badRequestError';
+import { getCep } from '../helper/cep';
+import { clear } from '../helper/clear';
+import { validateCnpj } from '../helper/validateCnpj';
+import { Endereco } from '../model/endereco.entity';
+import { Rental } from '../model/rental.entity';
+import { IdAllDto } from '../validation/id-all.dto';
+import { GetRentalDto } from '../validation/rental/get-rental.dto';
 import { Repository } from 'typeorm';
 import { CreateRentalDto } from '../validation/rental/create-rental.dto';
 import { UpdateRentalDto } from '../validation/rental/update-rental.dto';

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { JwtService } from '@nestjs/jwt';
-import { User } from 'src/model/user.entity';
+import { User } from '../model/user.entity';
 
 interface Login {
   email?: string;

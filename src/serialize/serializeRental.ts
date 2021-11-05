@@ -1,17 +1,10 @@
-const serialize = ({
-  id,
-  modelo,
-  cor,
-  ano,
-  quantidadePassagerios,
-  acessorios,
-}): object => {
-  return { id, modelo, cor, ano, quantidadePassagerios, acessorios };
+const serialize = ({ id, nome, cnpj, atividades, enderecos }): object => {
+  return { id, nome, cnpj, atividades, enderecos };
 };
 
-export const paginatedSerializeCar = ({ items, meta }): object => {
+export const paginatedSerializeRental = ({ items, meta }): object => {
   return {
-    car: items.map(serialize),
+    locadoras: items.map(serialize),
     total: meta.totalItems,
     limit: meta.itemsPerPage,
     offset: meta.currentPage,

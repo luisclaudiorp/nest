@@ -1,4 +1,4 @@
-import { InvalidError } from 'src/errors/InvalidError';
+import { InvalidError } from '../errors/InvalidError';
 
 const isValidCPF = (cpf: string): boolean => {
   let sum = 0;

@@ -10,10 +10,10 @@ import {
   Pagination,
   paginate,
 } from 'nestjs-typeorm-paginate';
-import { GetCarDto } from 'src/validation/cars/get-car.dto';
-import { IdAllDto } from 'src/validation/id-all.dto';
-import { clear } from 'src/helper/clear';
-import { NotFoundError } from 'src/errors/notFoundError';
+import { GetCarDto } from '../validation/cars/get-car.dto';
+import { IdAllDto } from '../validation/id-all.dto';
+import { clear } from '../helper/clear';
+import { NotFoundError } from '../errors/notFoundError';
 
 @Injectable()
 export class CarsService {

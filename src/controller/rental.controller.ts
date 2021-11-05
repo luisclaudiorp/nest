@@ -17,9 +17,10 @@ import {
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { Rental } from 'src/model/rental.entity';
-import { IdAllDto } from 'src/validation/id-all.dto';
-import { GetRentalDto } from 'src/validation/rental/get-rental.dto';
+import { Rental } from '../model/rental.entity';
+import { paginatedSerializeRental } from '../serialize/serializeRental';
+import { IdAllDto } from '../validation/id-all.dto';
+import { GetRentalDto } from '../validation/rental/get-rental.dto';
 import { RentalService } from '../service/rental.service';
 import { CreateRentalDto } from '../validation/rental/create-rental.dto';
 import { UpdateRentalDto } from '../validation/rental/update-rental.dto';
@@ -41,8 +42,8 @@ export class RentalController {
       page,
       limit,
     };
-    return await this.rentalService.paginate(options, query);
-    //return paginatedSerializePeople(result);
+    const result = await this.rentalService.paginate(options, query);
+    return paginatedSerializeRental(result);
   }
 
   @ApiOkResponse({ type: Rental })

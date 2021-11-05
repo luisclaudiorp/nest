@@ -1,4 +1,4 @@
-import { AgeError } from 'src/errors/ageError';
+import { AgeError } from '../errors/ageError';
 
 export const validateDate = (dateUser: string): number => {
   const dates = dateUser.split('/');

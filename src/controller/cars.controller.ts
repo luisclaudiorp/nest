@@ -14,7 +14,7 @@ import {
 import { CarsService } from '../service/cars.service';
 import { CreateCarDto } from '../validation/cars/create-car.dto';
 import { UpdateCarDto } from '../validation/cars/update-car.dto';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Car } from '../model/car.entity';
 import {
   ApiBearerAuth,
@@ -24,10 +24,10 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { GetCarDto } from 'src/validation/cars/get-car.dto';
-import { IdAllDto } from 'src/validation/id-all.dto';
-import { paginatedSerializeCar } from 'src/serialize/serializeCar';
-import { Acessorio } from 'src/model/acessories.entity';
+import { GetCarDto } from '../validation/cars/get-car.dto';
+import { IdAllDto } from '../validation/id-all.dto';
+import { paginatedSerializeCar } from '../serialize/serializeCar';
+import { Acessorio } from '../model/acessories.entity';
 
 @Controller('/api/v1/car')
 @ApiTags('Car')

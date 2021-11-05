@@ -13,7 +13,7 @@ import {
 import { UsersService } from '../service/users.service';
 import { CreateUserDto } from '../validation/users/create-user.dto';
 import { UpdateUserDto } from '../validation/users/update-user.dto';
-import { GetUserDto } from 'src/validation/users/get-user.dto';
+import { GetUserDto } from '../validation/users/get-user.dto';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
@@ -23,8 +23,8 @@ import {
 } from '@nestjs/swagger';
 import { User } from '../model/user.entity';
 import { JoiPipe } from 'nestjs-joi';
-import { paginatedSerializePeople } from 'src/serialize/serializePeople';
-import { IdAllDto } from 'src/validation/id-all.dto';
+import { paginatedSerializePeople } from '../serialize/serializePeople';
+import { IdAllDto } from '../validation/id-all.dto';
 
 @Controller('api/v1/people')
 @ApiTags('People')

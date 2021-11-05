@@ -1,4 +1,4 @@
-import { InvalidError } from 'src/errors/InvalidError';
+import { InvalidError } from '../errors/InvalidError';
 
 const validCnpj = (cnpj: string): boolean => {
   cnpj = cnpj.replace(/[^\d]+/g, '');
