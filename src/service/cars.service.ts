@@ -43,6 +43,7 @@ export class CarsService {
       const acessorio = new Acessorio();
       acessorio.descricao = a.descricao;
       acessorio.car = newCar;
+      console.log(acessorio);
       const newAcessorio = this.acessorioRepository.create(acessorio);
       await this.acessorioRepository.save(newAcessorio);
     });

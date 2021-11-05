@@ -12,31 +12,45 @@ import { Rental } from './rental.entity';
 @Entity()
 export class Endereco {
   @PrimaryGeneratedColumn()
-  @Column({ primary: true })
+  @Column({ primary: true, select: false })
   id: number;
 
   @ApiProperty()
-  @Column()
+  @Column({ nullable: false, type: 'varchar', length: 9 })
   cep: string;
 
   @ApiProperty()
-  @Column()
+  @Column({ nullable: false, type: 'varchar', length: 10 })
   number: string;
 
   @ApiProperty()
-  @Column()
+  @Column({ type: 'varchar', length: 200 })
   complemento: string;
+
+  @ApiProperty()
+  @Column({ nullable: false, type: 'varchar', length: 100 })
+  localidade: string;
+
+  @ApiProperty()
+  @Column({ nullable: false, type: 'varchar', length: 100 })
+  logradouro: string;
+
+  @ApiProperty()
+  @Column({ nullable: false, type: 'varchar', length: 200 })
+  bairro: string;
+
+  @ApiProperty()
+  @Column({ nullable: false, type: 'varchar', length: 3 })
+  uf: string;
 
   @ApiProperty()
   @Column('enum', { enum: ['true', 'false'], default: false })
   isFilial: string;
 
-  @ApiProperty()
-  @ManyToOne(() => Rental, (c) => c.enderecos)
+  @ManyToOne(() => Rental, (r) => r.enderecos)
   rental: Rental;
-  endereco: Rental[];
 
-  @Column()
+  @Column({ default: false, select: false })
   rentalId?: number;
 
   @CreateDateColumn({ select: false })

@@ -1,7 +1,8 @@
 import { InvalidError } from 'src/errors/InvalidError';
 
-const invalidCnpj = (cnpj: string): boolean => {
+const validCnpj = (cnpj: string): boolean => {
   cnpj = cnpj.replace(/[^\d]+/g, '');
+
   if (cnpj == '') return false;
   if (cnpj.length != 14) return false;
   if (
@@ -23,22 +24,21 @@ const invalidCnpj = (cnpj: string): boolean => {
   let add = 0;
   let pos: number = len - 7;
   for (let i = len; i >= 1; i--) {
-    add += numbers.charAt(len - i).length * pos--;
+    add += <any>numbers.charAt(len - i) * pos--;
     if (pos < 2) pos = 9;
   }
   let result: number = add % 11 < 2 ? 0 : 11 - (add % 11);
-  if (result != digits.charAt(0).length) return false;
+  if (<any>result != digits.charAt(0)) return false;
   len = len + 1;
   numbers = cnpj.substring(0, len);
   add = 0;
   pos = len - 7;
   for (let i = len; i >= 1; i--) {
-    add += numbers.charAt(len - i).length * pos--;
+    add += <any>numbers.charAt(len - i) * pos--;
     if (pos < 2) pos = 9;
   }
   result = add % 11 < 2 ? 0 : 11 - (add % 11);
-  if (result != digits.charAt(1).length) return false;
-
+  if (<any>result != digits.charAt(1)) return false;
   return true;
 };
 
@@ -52,7 +52,7 @@ const format = (cnpj: string): string => {
 };
 
 export const validateCnpj = (cnpjUser: string): string => {
-  const valid = invalidCnpj(cnpjUser);
+  const valid = validCnpj(cnpjUser);
   if (valid === true) {
     const cnpjFormat = format(cnpjUser);
     return cnpjFormat;

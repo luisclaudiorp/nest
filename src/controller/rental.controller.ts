@@ -29,13 +29,14 @@ import { UpdateRentalDto } from '../validation/rental/update-rental.dto';
 export class RentalController {
   constructor(private readonly rentalService: RentalService) {}
 
-  @ApiOkResponse({ type: GetRentalDto, isArray: true })
+  @ApiOkResponse({ type: Rental, isArray: true })
   @Get('')
   async index(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page = 1,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit = 100,
     @Query() query: GetRentalDto,
   ): Promise<object> {
+    limit = limit > 100 ? 100 : limit;
     const options = {
       page,
       limit,

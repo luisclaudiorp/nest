@@ -3,6 +3,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -18,7 +19,7 @@ export class Rental {
   @ApiProperty()
   nome: string;
 
-  @Column({ nullable: false, type: 'varchar', length: 14 })
+  @Column({ nullable: false, type: 'varchar', length: 18 })
   @ApiProperty()
   cnpj: string;
 
@@ -26,9 +27,9 @@ export class Rental {
   @ApiProperty()
   atividades: string;
 
-  @OneToMany(() => Endereco, (a) => a.endereco)
+  @OneToMany(() => Endereco, (e) => e.rental)
   @ApiProperty({ type: () => Endereco })
-  enderecos: Endereco;
+  enderecos: Endereco[];
 
   @CreateDateColumn()
   data_criacao: Date;

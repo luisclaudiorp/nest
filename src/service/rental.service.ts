@@ -5,7 +5,10 @@ import {
   paginate,
   Pagination,
 } from 'nestjs-typeorm-paginate';
+import { BadRequestError } from 'src/errors/badRequestError';
+import { getCep } from 'src/helper/cep';
 import { clear } from 'src/helper/clear';
+import { validateCnpj } from 'src/helper/validateCnpj';
 import { Endereco } from 'src/model/endereco.entity';
 import { Rental } from 'src/model/rental.entity';
 import { IdAllDto } from 'src/validation/id-all.dto';
@@ -30,30 +33,38 @@ export class RentalService {
     clear(query);
     return paginate<Rental>(this.rentalsRepository, options, {
       where: query,
-      relations: ['endereco'],
+      relations: ['enderecos'],
     });
   }
 
   async create(createRentalDto: CreateRentalDto): Promise<Rental> {
-    const { enderecos, ...data } = createRentalDto;
-    const newRental = this.rentalsRepository.create(data);
-    await this.rentalsRepository.save(newRental);
-    createRentalDto.enderecos.forEach(async (a) => {
-      let endereco = new Endereco();
-      endereco = a;
-      endereco.rental = newRental;
-      const newEndereco = this.enderecoRepository.create(endereco);
-      await this.enderecoRepository.save(newEndereco);
-    });
-    return await this.rentalsRepository.findOne(newRental.id);
+    const userCnpj = validateCnpj(createRentalDto.cnpj);
+    const obj = await this.findByCnpj(userCnpj);
+    if (typeof obj === 'undefined') {
+      validateCnpj(createRentalDto.cnpj);
+      const { enderecos, ...data } = createRentalDto;
+      const newRental = this.rentalsRepository.create(data);
+      await this.rentalsRepository.save(newRental);
+      const [cepNumber] = enderecos.map((a) => a.cep);
+      const adrress = await getCep(cepNumber);
+      createRentalDto.enderecos.forEach(async (a) => {
+        const newAdress = new Endereco();
+        Object.assign(newAdress, adrress, a);
+        newAdress.rental = newRental;
+        const newEndereco = this.enderecoRepository.create(newAdress);
+        await this.enderecoRepository.save(newEndereco);
+      });
+      return await this.rentalsRepository.findOne(newRental.id);
+    }
+    throw new BadRequestError('CNPJ');
+  }
+
+  async findByCnpj(cnpj: string): Promise<Rental> {
+    return await this.rentalsRepository.findOne({ cnpj });
   }
 
   async findOneById(id: IdAllDto): Promise<Rental> {
-    try {
-      return await this.rentalsRepository.findOneOrFail(id);
-    } catch (error) {
-      throw error;
-    }
+    return await this.rentalsRepository.findOneOrFail(id);
   }
 
   async update(

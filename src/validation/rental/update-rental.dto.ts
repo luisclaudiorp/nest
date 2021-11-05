@@ -12,7 +12,7 @@ export class UpdateRentalDto extends PartialType(CreateRentalDto) {
   nome: string;
 
   @ApiProperty()
-  @JoiSchema(Joi.string().trim().length(14).optional())
+  @JoiSchema(Joi.string().min(14).max(18).trim().optional())
   @IsString()
   cnpj: string;
 

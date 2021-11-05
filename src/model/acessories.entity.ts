@@ -16,7 +16,7 @@ export class Acessorio {
   id: number;
 
   @ApiProperty()
-  @Column()
+  @Column({ nullable: false, type: 'varchar', length: 100 })
   descricao: string;
 
   @ManyToOne(() => Car, (c) => c.acessorios)
