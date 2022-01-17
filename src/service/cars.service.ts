@@ -72,6 +72,7 @@ export class CarsService {
   async remove(id: IdAllDto): Promise<Car> {
     try {
       const Car = await this.findOneById(id);
+      console.log(Car)
       return await this.carsRepository.remove(Car);
     } catch (error) {
       throw error;
